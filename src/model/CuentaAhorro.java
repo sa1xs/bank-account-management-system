@@ -9,6 +9,16 @@ public class CuentaAhorro {
     private String numeroCuenta;
 
     public CuentaAhorro(double saldo, LocalDate fechaEmision, LocalDate fechaVencimiento, double porcentajeInteres,String numeroCuenta) {
+        if (saldo < 100) {
+            throw new IllegalArgumentException("La cuenta de ahorro debe tener un saldo mínimo de $100");
+        }
+        if (fechaEmision == null || fechaVencimiento == null) {
+            throw new IllegalArgumentException("Las fechas no pueden estar vacías");
+        }
+
+        if (!fechaVencimiento.isAfter(fechaEmision)) {
+            throw new IllegalArgumentException("La fecha de vencimiento debe ser posterior a la fecha de emisión");
+        }
         this.saldo = saldo;
         this.fechaEmision = fechaEmision;
         this.fechaVencimiento = fechaVencimiento;
@@ -29,6 +39,10 @@ public class CuentaAhorro {
     }
 
     public void setFechaVencimiento(LocalDate fechaVencimiento) {
+
+        if (fechaVencimiento == null || !fechaVencimiento.isAfter(fechaEmision)) {
+            throw new IllegalArgumentException("La fecha de vencimiento debe ser posterior a la fecha de emisión");
+        }
         this.fechaVencimiento = fechaVencimiento;
     }
 
@@ -53,5 +67,17 @@ public class CuentaAhorro {
                 "\nFecha de emisión: " + fechaEmision +
                 "\nFecha de vencimiento: " + fechaVencimiento +
                 "\nPorcentaje de interés: " + porcentajeInteres + "%";
+    }
+
+    public void depositar(double monto) {
+
+    }
+
+    public void pagar(double monto) {
+
+    }
+
+    public void generarIntereses() {
+
     }
 }

@@ -18,7 +18,7 @@ public class Cliente {
         this.cedula = cedula;
         this.sexo = sexo;
         this.correo = correo;
-        this.contrasena = contrasena;
+        setContrasena(contrasena);
         this.profesion = profesion;
         this.direccion = direccion;
         this.cuentasAhorro = new ArrayList<>();
@@ -63,6 +63,11 @@ public class Cliente {
     }
 
     public void setContrasena(String contrasena) {
+
+        if (contrasena == null ||
+                !contrasena.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z0-9\\s]).{8,}")) {
+            throw new IllegalArgumentException("La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial");
+        }
         this.contrasena = contrasena;
     }
 
@@ -121,5 +126,62 @@ public class Cliente {
                 "\nCuentas de ahorro: " + cuentasAhorro.size() +
                 "\nCuentas de débito: " + cuentasDebito.size() +
                 "\nCuentas de crédito: " + cuentasCredito.size();
+    }
+
+    public void agregarCuentaAhorro(CuentaAhorro cuenta) {
+        if (cuenta != null) {
+            cuentasAhorro.add(cuenta);
+        }
+    }
+
+    public void agregarCuentaDebito(CuentaDebito cuenta) {
+        if (cuenta != null) {
+            cuentasDebito.add(cuenta);
+        }
+    }
+
+    public void agregarCuentaCredito(CuentaCredito cuenta) {
+        if (cuenta != null) {
+            cuentasCredito.add(cuenta);
+        }
+    }
+
+    public void listarCuentas() {
+        System.out.println("Cuentas de: " + nombreCompleto);
+        for (CuentaAhorro cuenta : cuentasAhorro) {
+            System.out.println(cuenta);
+            System.out.println();
+        }
+        for (CuentaDebito cuenta : cuentasDebito) {
+            System.out.println(cuenta);
+            System.out.println();
+        }
+        for (CuentaCredito cuenta : cuentasCredito) {
+            System.out.println(cuenta);
+            System.out.println();
+        }
+    }
+
+    public void mostrarEstadoCuenta() {
+        double total = 0;
+
+        System.out.println("Estado de cuenta de: " + nombreCompleto);
+
+        for (CuentaAhorro cuenta : cuentasAhorro) {
+            System.out.println("Ahorro - " + cuenta.getNumeroCuenta() + ": $" + cuenta.getSaldo());
+            total += cuenta.getSaldo();
+        }
+
+        for (CuentaDebito cuenta : cuentasDebito) {
+            System.out.println("Débito - " + cuenta.getNumeroCuenta() + ": $" + cuenta.getSaldo());
+            total += cuenta.getSaldo();
+        }
+
+        for (CuentaCredito cuenta : cuentasCredito) {
+            System.out.println("Crédito - " + cuenta.getNumeroCuenta() + ": -$" + cuenta.getSaldo());
+            total -= cuenta.getSaldo();
+        }
+
+        System.out.println("Saldo consolidado: $" + total);
     }
 }
